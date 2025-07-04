@@ -6,6 +6,7 @@
     <title>Game Hub</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="desktop-ui-style.css">
+    <link rel="stylesheet" href="animal-chess.css">
     <!-- Socket.IO client -->
     <script src="/socket.io/socket.io.js"></script>
     <!-- Add electron-specific scripts only for desktop app -->
@@ -21,6 +22,7 @@
         }
     </script>
     <script src="game-selection.js"></script>
+    <script src="animal-chess.js"></script>
 </head>
 <body>
     <div class="container">
@@ -132,6 +134,12 @@
                     <p><strong>Luật cơ bản:</strong> Cờ thú là trò chơi chiến thuật giữa hai người chơi trên bàn cờ 7x9.</p>
                     <p><strong>Mục tiêu:</strong> Đưa một trong các con thú của bạn vào hang (đền) của đối phương hoặc bắt hết các con thú của đối phương.</p>
                     <p><strong>Thứ bậc quân cờ:</strong> Voi > Sư tử > Cọp > Báo > Chó > Sói > Mèo > Chuột. Chuột có thể bắt Voi.</p>
+                    <p><strong>Nước đi đặc biệt:</strong></p>
+                    <ul>
+                        <li>Chuột có thể đi vào nước, các con khác không thể</li>
+                        <li>Sư tử và Cọp có thể nhảy qua nước nếu không có Chuột ở giữa</li>
+                        <li>Quân trong bẫy của đối phương sẽ không có sức mạnh</li>
+                    </ul>
                 </div>
             </div>
             
@@ -139,6 +147,10 @@
             <div class="back-to-selection">
                 <button id="animal-back-to-game-types-btn" class="back-btn">Quay lại</button>
             </div>
+        </div>
+        
+        <!-- Animal Chess Game Board Container -->
+        <div id="animal-chess-game-container" class="animal-chess-container" style="display: none;">
         </div>
         
         <!-- Local/AI Game settings -->

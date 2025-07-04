@@ -1,0 +1,262 @@
+/* CSS cho game Cờ Thú Việt Nam */
+.animal-chess-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+}
+
+.animal-chess-status {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.animal-chess-board {
+    display: grid;
+    grid-template-columns: repeat(7, 60px);
+    grid-template-rows: repeat(9, 60px);
+    gap: 2px;
+    background-color: #cca776;
+    border: 10px solid #8b4513;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.5s ease;
+    margin-bottom: 20px;
+}
+
+.animal-chess-board.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-cell {
+    width: 60px;
+    height: 60px;
+    background-color: #e6bc82;
+    border: 1px solid #8b4513;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.animal-chess-cell.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-cell.water {
+    background-color: #a8d5ff;
+    background-image: linear-gradient(45deg, #90c8ff 25%, transparent 25%, transparent 75%, #90c8ff 75%, #90c8ff), 
+                      linear-gradient(45deg, #90c8ff 25%, transparent 25%, transparent 75%, #90c8ff 75%, #90c8ff);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.animal-chess-cell.den {
+    background-color: #543b22;
+}
+
+.animal-chess-cell.trap {
+    background-color: #e6bc82;
+}
+
+.animal-chess-cell.trap::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, transparent 0%, transparent 60%, #b98c4b 60%, #b98c4b 100%);
+    opacity: 0.8;
+}
+
+.animal-chess-cell.possible-move {
+    background-color: #c6e869;
+    box-shadow: inset 0 0 10px #5cb85c;
+    cursor: pointer;
+}
+
+.animal-chess-cell.possible-move.water {
+    background-color: #a8ffff;
+}
+
+.den-label {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+}
+
+.animal-chess-piece {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.animal-chess-piece.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-piece.red {
+    background-color: #d43939;
+    color: white;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.animal-chess-piece.blue {
+    background-color: #3973d4;
+    color: white;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+.animal-chess-piece.selected {
+    box-shadow: 0 0 0 3px #ffeb3b, 0 3px 5px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.animal-chess-piece.flipped.selected {
+    transform: rotate(180deg) scale(1.1);
+}
+
+.animal-chess-piece .animal-text {
+    font-size: 24px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.piece-label {
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    bottom: -2px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.animal-chess-controls {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.animal-chess-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.reset-button {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.reset-button:hover {
+    background-color: #4cae4c;
+}
+
+.flip-button {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.flip-button:hover {
+    background-color: #eea236;
+}
+
+.back-button {
+    background-color: #d9534f;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #c9302c;
+}
+
+/* Media queries cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .animal-chess-board {
+        grid-template-columns: repeat(7, 50px);
+        grid-template-rows: repeat(9, 50px);
+    }
+    
+    .animal-chess-cell {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .animal-chess-piece {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .animal-chess-piece .animal-text {
+        font-size: 20px;
+    }
+    
+    .piece-label {
+        font-size: 8px;
+        bottom: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .animal-chess-board {
+        grid-template-columns: repeat(7, 40px);
+        grid-template-rows: repeat(9, 40px);
+    }
+    
+    .animal-chess-cell {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .animal-chess-piece {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .animal-chess-piece .animal-text {
+        font-size: 16px;
+    }
+    
+    .den-label,
+    .piece-label {
+        font-size: 7px;
+    }
+    
+    .animal-chess-button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+    
+    .animal-chess-status {
+        font-size: 1.2rem;
+    }
+    
+    .animal-chess-cell.trap::before {
+        width: 30px;
+        height: 30px;
+    }
+} 
