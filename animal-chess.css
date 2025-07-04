@@ -52,11 +52,61 @@
 }
 
 .animal-chess-cell.water {
-    background-color: #a8d5ff;
-    background-image: linear-gradient(45deg, #90c8ff 25%, transparent 25%, transparent 75%, #90c8ff 75%, #90c8ff), 
-                      linear-gradient(45deg, #90c8ff 25%, transparent 25%, transparent 75%, #90c8ff 75%, #90c8ff);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
+    background-color: #63b4ff;
+    background-image: 
+        linear-gradient(125deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 60%),
+        linear-gradient(236deg, rgba(158, 207, 255, 0.6) 0%, rgba(120, 190, 255, 0.5) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.animal-chess-cell.water::before,
+.animal-chess-cell.water::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* Hiệu ứng sóng thứ nhất */
+.animal-chess-cell.water::before {
+    background: 
+        radial-gradient(circle at 30% 50%, transparent 0%, transparent 30%, rgba(255, 255, 255, 0.3) 30%, rgba(255, 255, 255, 0) 70%),
+        radial-gradient(circle at 70% 80%, transparent 0%, transparent 10%, rgba(255, 255, 255, 0.3) 10%, rgba(255, 255, 255, 0) 40%);
+    background-size: 50px 50px, 40px 40px;
+    animation: waterAnimation1 8s linear infinite;
+}
+
+/* Hiệu ứng sóng thứ hai */
+.animal-chess-cell.water::after {
+    background: 
+        radial-gradient(circle at 60% 30%, transparent 0%, transparent 20%, rgba(255, 255, 255, 0.3) 20%, rgba(255, 255, 255, 0) 50%),
+        radial-gradient(circle at 20% 70%, transparent 0%, transparent 15%, rgba(255, 255, 255, 0.3) 15%, rgba(255, 255, 255, 0) 45%);
+    background-size: 60px 60px, 35px 35px;
+    animation: waterAnimation2 10s linear infinite;
+}
+
+@keyframes waterAnimation1 {
+    0% {
+        background-position: 0px 0px, 0px 0px;
+    }
+    100% {
+        background-position: 50px 50px, 40px 40px;
+    }
+}
+
+@keyframes waterAnimation2 {
+    0% {
+        background-position: 0px 0px, 0px 0px;
+    }
+    100% {
+        background-position: 60px 60px, 35px 35px;
+    }
 }
 
 .animal-chess-cell.den {
@@ -83,7 +133,13 @@
 }
 
 .animal-chess-cell.possible-move.water {
-    background-color: #a8ffff;
+    background-color: #4eb8ff;
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.7);
+}
+
+.animal-chess-cell.possible-move.water::before,
+.animal-chess-cell.possible-move.water::after {
+    opacity: 0.6;
 }
 
 .den-label {
@@ -221,6 +277,32 @@
         height: 50px;
     }
     
+    .animal-chess-cell.water::before {
+        background-size: 40px 40px, 30px 30px;
+    }
+    
+    .animal-chess-cell.water::after {
+        background-size: 45px 45px, 25px 25px;
+    }
+    
+    @keyframes waterAnimation1 {
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+        100% {
+            background-position: 40px 40px, 30px 30px;
+        }
+    }
+    
+    @keyframes waterAnimation2 {
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+        100% {
+            background-position: 45px 45px, 25px 25px;
+        }
+    }
+    
     .animal-chess-piece {
         width: 45px;
         height: 45px;
@@ -252,6 +334,34 @@
     .animal-chess-cell {
         width: 40px;
         height: 40px;
+    }
+    
+    .animal-chess-cell.water::before {
+        background-size: 30px 30px, 25px 25px;
+        opacity: 0.3;
+    }
+    
+    .animal-chess-cell.water::after {
+        background-size: 35px 35px, 20px 20px;
+        opacity: 0.3;
+    }
+    
+    @keyframes waterAnimation1 {
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+        100% {
+            background-position: 30px 30px, 25px 25px;
+        }
+    }
+    
+    @keyframes waterAnimation2 {
+        0% {
+            background-position: 0px 0px, 0px 0px;
+        }
+        100% {
+            background-position: 35px 35px, 20px 20px;
+        }
     }
     
     .animal-chess-piece {
