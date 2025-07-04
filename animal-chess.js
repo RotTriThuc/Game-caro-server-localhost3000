@@ -26,6 +26,18 @@ class AnimalChess {
             'R': 'Chuột'   // Rat
         };
         
+        // Biểu tượng con thú
+        this.animalIcons = {
+            'E': '🐘',  // Voi
+            'L': '🦁',  // Sư tử
+            'T': '🐯',  // Cọp
+            'P': '🐆',  // Báo
+            'D': '🐕',  // Chó
+            'W': '🐺',  // Sói
+            'C': '🐱',  // Mèo
+            'R': '🐭'   // Chuột
+        };
+        
         // Thứ bậc sức mạnh (cao -> thấp)
         this.animalRanks = {
             'E': 7,
@@ -120,24 +132,24 @@ class AnimalChess {
         // Khởi tạo vị trí ban đầu của quân cờ
         const initialSetup = [
             // Quân xanh (player 2)
-            { animal: 'L', row: 0, col: 0, player: 'blue' },
-            { animal: 'T', row: 0, col: 6, player: 'blue' },
-            { animal: 'D', row: 1, col: 1, player: 'blue' },
-            { animal: 'C', row: 1, col: 5, player: 'blue' },
-            { animal: 'R', row: 2, col: 0, player: 'blue' },
-            { animal: 'W', row: 2, col: 2, player: 'blue' },
-            { animal: 'P', row: 2, col: 4, player: 'blue' },
-            { animal: 'E', row: 2, col: 6, player: 'blue' },
+            { animal: 'L', row: 0, col: 0, player: 'blue', power: 7 }, // Sư tử
+            { animal: 'T', row: 0, col: 6, player: 'blue', power: 6 }, // Cọp
+            { animal: 'D', row: 1, col: 1, player: 'blue', power: 4 }, // Chó
+            { animal: 'C', row: 1, col: 5, player: 'blue', power: 2 }, // Mèo
+            { animal: 'R', row: 2, col: 0, player: 'blue', power: 1 }, // Chuột - bắt được Voi
+            { animal: 'W', row: 2, col: 2, player: 'blue', power: 3 }, // Sói
+            { animal: 'P', row: 2, col: 4, player: 'blue', power: 5 }, // Báo
+            { animal: 'E', row: 2, col: 6, player: 'blue', power: 8 }, // Voi - mạnh nhất
             
             // Quân đỏ (player 1)
-            { animal: 'E', row: 6, col: 0, player: 'red' },
-            { animal: 'P', row: 6, col: 2, player: 'red' },
-            { animal: 'W', row: 6, col: 4, player: 'red' },
-            { animal: 'R', row: 6, col: 6, player: 'red' },
-            { animal: 'C', row: 7, col: 1, player: 'red' },
-            { animal: 'D', row: 7, col: 5, player: 'red' },
-            { animal: 'T', row: 8, col: 0, player: 'red' },
-            { animal: 'L', row: 8, col: 6, player: 'red' }
+            { animal: 'E', row: 6, col: 0, player: 'red', power: 8 }, // Voi - mạnh nhất
+            { animal: 'P', row: 6, col: 2, player: 'red', power: 5 }, // Báo
+            { animal: 'W', row: 6, col: 4, player: 'red', power: 3 }, // Sói
+            { animal: 'R', row: 6, col: 6, player: 'red', power: 1 }, // Chuột - bắt được Voi
+            { animal: 'C', row: 7, col: 1, player: 'red', power: 2 }, // Mèo
+            { animal: 'D', row: 7, col: 5, player: 'red', power: 4 }, // Chó
+            { animal: 'T', row: 8, col: 0, player: 'red', power: 6 }, // Cọp
+            { animal: 'L', row: 8, col: 6, player: 'red', power: 7 }  // Sư tử
         ];
         
         // Tạo các quân cờ trên bàn cờ
@@ -149,11 +161,17 @@ class AnimalChess {
             piece.dataset.row = pieceData.row;
             piece.dataset.col = pieceData.col;
             
-            // Thêm văn bản hiển thị quân cờ (tạm thời thay cho hình ảnh)
+            // Thêm biểu tượng con thú
+            const animalIcon = document.createElement('div');
+            animalIcon.className = 'animal-icon';
+            animalIcon.textContent = this.animalIcons[pieceData.animal];
+            animalIcon.title = `${pieceData.player === 'red' ? 'Đỏ' : 'Xanh'} - ${this.animalNames[pieceData.animal]}`;
+            piece.appendChild(animalIcon);
+            
+            // Thêm ký hiệu động vật (để dễ phân biệt)
             const animalText = document.createElement('div');
             animalText.className = 'animal-text';
             animalText.textContent = pieceData.animal;
-            animalText.title = `${pieceData.player === 'red' ? 'Đỏ' : 'Xanh'} - ${this.animalNames[pieceData.animal]}`;
             piece.appendChild(animalText);
             
             // Thêm nhãn tên thú
@@ -384,7 +402,7 @@ class AnimalChess {
         
         // Kiểm tra xem người tấn công có nằm trong bẫy không
         const attackerCell = this.getCellAt(attackerRow, attackerCol);
-        if (attackerCell.classList.contains('trap')) {
+        if (attackerCell && attackerCell.classList.contains('trap')) {
             const trapOwner = attackerCell.dataset.owner;
             if (trapOwner !== this.currentPlayer) {
                 // Quân trong bẫy của đối phương không thể bắt quân

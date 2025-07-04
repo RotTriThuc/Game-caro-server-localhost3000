@@ -135,10 +135,25 @@
     transform: rotate(180deg) scale(1.1);
 }
 
+.animal-chess-piece .animal-icon {
+    font-size: 30px;
+    pointer-events: none;
+    margin-bottom: -5px;
+}
+
 .animal-chess-piece .animal-text {
-    font-size: 24px;
+    font-size: 12px;
     font-weight: bold;
     pointer-events: none;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
 }
 
 .piece-label {
@@ -211,8 +226,15 @@
         height: 45px;
     }
     
+    .animal-chess-piece .animal-icon {
+        font-size: 24px;
+    }
+    
     .animal-chess-piece .animal-text {
-        font-size: 20px;
+        font-size: 10px;
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
     }
     
     .piece-label {
@@ -237,8 +259,18 @@
         height: 36px;
     }
     
+    .animal-chess-piece .animal-icon {
+        font-size: 18px;
+        margin-bottom: -2px;
+    }
+    
     .animal-chess-piece .animal-text {
-        font-size: 16px;
+        font-size: 8px;
+        width: 10px;
+        height: 10px;
+        line-height: 10px;
+        top: 1px;
+        right: 1px;
     }
     
     .den-label,
