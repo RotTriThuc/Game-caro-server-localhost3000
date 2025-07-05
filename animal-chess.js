@@ -9,16 +9,21 @@ class AnimalChess {
         this.currentPlayer = 'blue';
         this.gameActive = true;
         this.statusElement = null;
+        this.aiEnabled = false;
+        this.ai = null;
+        this.aiThinking = false;
+        this.gameMode = 'local'; // 'local' hoặc 'ai'
 
         this.animalRanks = { 'E': 8, 'L': 7, 'T': 6, 'P': 5, 'D': 4, 'W': 3, 'C': 2, 'R': 1 };
         this.animalNames = { 'E': 'Voi', 'L': 'Sư tử', 'T': 'Cọp', 'P': 'Báo', 'D': 'Chó', 'W': 'Sói', 'C': 'Mèo', 'R': 'Chuột' };
         this.animalIcons = { 'E': '🐘', 'L': '🦁', 'T': '🐯', 'P': '🐆', 'D': '🐕', 'W': '🐺', 'C': '🐱', 'R': '🐭' };
     }
 
-    init(containerId) {
+    init(containerId, gameMode = 'local', aiDifficulty = 'medium') {
         const container = document.getElementById(containerId);
         container.innerHTML = ''; // Xóa nội dung cũ
 
+        this.gameMode = gameMode;
         this.statusElement = document.createElement('div');
         this.statusElement.className = 'animal-chess-status';
         container.appendChild(this.statusElement);
@@ -29,6 +34,13 @@ class AnimalChess {
 
         this.createBoard();
         this.initializePieces();
+        
+        // Khởi tạo AI nếu chơi với máy
+        if (gameMode === 'ai') {
+            this.aiEnabled = true;
+            this.ai = new AnimalChessAI(this, aiDifficulty);
+        }
+        
         this.updateStatus();
 
         const controls = document.createElement('div');
@@ -194,7 +206,7 @@ class AnimalChess {
     }
 
     handleCellClick(row, col) {
-        if (!this.selectedPiece || !this.gameActive) return;
+        if (!this.gameActive || this.aiThinking) return;
 
         const move = this.getPossibleMoves(this.selectedPiece).find(m => m.row === row && m.col === col);
 
@@ -211,6 +223,11 @@ class AnimalChess {
             if (this.gameActive) {
                 this.switchPlayer();
                 this.updateStatus();
+                
+                // Nếu đang chơi với AI và đến lượt AI
+                if (this.aiEnabled && this.currentPlayer === 'red' && this.gameActive) {
+                    this.makeAIMove();
+                }
             }
             
             this.clearSelection();
@@ -324,8 +341,18 @@ class AnimalChess {
         this.currentPlayer = (this.currentPlayer === 'blue') ? 'red' : 'blue';
     }
 
-    updateStatus() {
-        this.statusElement.textContent = `Lượt của: ${this.currentPlayer === 'blue' ? 'Xanh' : 'Đỏ'}`;
+    updateStatus(customMessage = null) {
+        if (customMessage) {
+            this.statusElement.textContent = customMessage;
+            return;
+        }
+        
+        if (!this.gameActive) {
+            return; // Giữ nguyên thông báo người thắng
+        }
+        
+        const playerText = this.currentPlayer === 'blue' ? 'Xanh (Người chơi)' : 'Đỏ' + (this.aiEnabled ? ' (Máy)' : '');
+        this.statusElement.textContent = `Lượt của: ${playerText}`;
     }
 
     clearSelection() {
@@ -362,6 +389,11 @@ class AnimalChess {
         this.clearSelection();
         this.initializePieces();
         this.updateStatus();
+        
+        // Nếu AI đi trước (hiếm khi xảy ra, nhưng để phòng trường hợp)
+        if (this.aiEnabled && this.currentPlayer === 'red') {
+            this.makeAIMove();
+        }
     }
     
     // Helper functions
@@ -390,5 +422,22 @@ class AnimalChess {
             }
         }
         return 0;
+    }
+
+    // Hàm mới để AI đưa ra nước đi
+    makeAIMove() {
+        if (!this.gameActive || !this.aiEnabled || this.currentPlayer !== 'red') return;
+        
+        this.aiThinking = true;
+        this.updateStatus("AI đang suy nghĩ...");
+        
+        // Sử dụng setTimeout để tạo hiệu ứng "suy nghĩ"
+        setTimeout(() => {
+            if (this.ai) {
+                this.ai.makeMove();
+            }
+            this.aiThinking = false;
+            this.updateStatus();
+        }, 500);
     }
 } 
