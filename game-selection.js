@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const animalLocalGameBtn = document.getElementById('animal-local-game-btn');
     const animalAiGameBtn = document.getElementById('animal-ai-game-btn');
     const animalOnlineGameBtn = document.getElementById('animal-online-game-btn');
+    const animalChessGameContainer = document.getElementById('animal-chess-game-container');
     
     // Animal Chess rules elements
     const animalRulesToggle = document.getElementById('animal-rules-toggle');
@@ -25,12 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const rankedSettingsSection = document.getElementById('ranked-settings');
     const gameBoardContainer = document.getElementById('game-board-container');
     
+    // Animal Chess game instance
+    let animalChessGame = null;
+    
     // Make sure all screens are hidden except game type selection at start
     function initializeScreens() {
         // Show only game type selection at start
         gameTypeSelection.style.display = 'block';
         caroGameSelection.style.display = 'none';
         animalChessSelection.style.display = 'none';
+        animalChessGameContainer.style.display = 'none';
         
         // Hide all other screens
         if (localSettingsSection) localSettingsSection.style.display = 'none';
@@ -78,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (onlineSettingsSection) onlineSettingsSection.style.display = 'none';
         if (rankedSettingsSection) rankedSettingsSection.style.display = 'none';
         if (gameBoardContainer) gameBoardContainer.style.display = 'none';
+        animalChessGameContainer.style.display = 'none';
     });
     
     // Toggle Animal Chess rules
@@ -90,21 +96,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Animal Chess mode selection
     animalLocalGameBtn.addEventListener('click', () => {
         console.log('Animal Chess: Local game selected');
-        // TODO: Implement Animal Chess local game
-        showNotification('Chế độ Cờ Thú đang được phát triển', true);
+        startAnimalChessGame('local');
     });
     
     animalAiGameBtn.addEventListener('click', () => {
         console.log('Animal Chess: AI game selected');
-        // TODO: Implement Animal Chess AI game
-        showNotification('Chế độ Cờ Thú đang được phát triển', true);
+        showNotification('Chế độ AI cho Cờ Thú sẽ được phát triển trong tương lai', true);
     });
     
     animalOnlineGameBtn.addEventListener('click', () => {
         console.log('Animal Chess: Online game selected');
-        // TODO: Implement Animal Chess online game
-        showNotification('Chế độ Cờ Thú đang được phát triển', true);
+        showNotification('Chế độ Online cho Cờ Thú sẽ được phát triển trong tương lai', true);
     });
+    
+    // Start Animal Chess game
+    function startAnimalChessGame(mode) {
+        // Hide selection screens
+        animalChessSelection.style.display = 'none';
+        
+        // Show game container
+        animalChessGameContainer.style.display = 'block';
+        animalChessGameContainer.innerHTML = ''; // Clear previous content
+        
+        // Initialize new game
+        try {
+            animalChessGame = new AnimalChess();
+            animalChessGame.init('animal-chess-game-container');
+            console.log('Animal Chess game initialized successfully');
+        } catch (error) {
+            console.error('Error initializing Animal Chess game:', error);
+            showNotification('Lỗi khởi tạo game Cờ Thú: ' + error.message, true);
+            animalChessSelection.style.display = 'block';
+            animalChessGameContainer.style.display = 'none';
+        }
+    }
+    
+    // Make showGameSelection function available globally
+    window.showGameSelection = function() {
+        animalChessGameContainer.style.display = 'none';
+        animalChessSelection.style.display = 'block';
+    };
     
     // Notification function
     function showNotification(message, isError = false) {
