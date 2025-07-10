@@ -1,0 +1,1150 @@
+/* CSS cho game Cờ Thú Việt Nam */
+.animal-chess-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+}
+
+.animal-chess-status {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 12px 24px;
+    background: linear-gradient(145deg, #f7f7f7, #e6e6e6);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 
+                inset 0 -2px 3px rgba(0, 0, 0, 0.1),
+                inset 0 2px 3px rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #333;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+}
+
+.animal-chess-board {
+    display: grid;
+    grid-template-columns: repeat(7, 60px);
+    grid-template-rows: repeat(9, 60px);
+    gap: 2px;
+    background-color: #8b4513;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23613109' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 0h60v60H0V0zm30 30h30v30H30V30zm-15 0h15v30H15V30z'/%3E%3C/g%3E%3C/svg%3E");
+    border: 12px solid;
+    border-image: linear-gradient(145deg, #a86f41, #6d3c1b) 1;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4),
+                inset 0 1px 5px rgba(255, 255, 255, 0.3),
+                0 0 0 1px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.animal-chess-board::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
+    background: linear-gradient(145deg, #a86f41, #6d3c1b);
+    z-index: -1;
+    border-radius: 12px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.animal-chess-board.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-cell {
+    width: 60px;
+    height: 60px;
+    background-color: #e6bc82;
+    background-image: linear-gradient(45deg, #e6bc82 25%, #dfb579 25%, #dfb579 50%, #e6bc82 50%, #e6bc82 75%, #dfb579 75%, #dfb579 100%);
+    background-size: 20px 20px;
+    border: 1px solid rgba(139, 69, 19, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.3), 
+                inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.animal-chess-cell.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-cell.water {
+    background-color: #1e90ff;
+    background-image: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2),
+                0 0 5px rgba(30, 144, 255, 0.3);
+}
+
+/* Water wave base */
+.animal-chess-cell.water::before {
+    content: "";
+    position: absolute;
+    left: -50%;
+    right: -50%;
+    top: -50%;
+    bottom: -50%;
+    background: linear-gradient(
+        0deg,
+        rgba(30, 144, 255, 0.7),
+        rgba(30, 144, 255, 0.5) 20%,
+        rgba(173, 216, 230, 0.7) 40%,
+        rgba(173, 216, 230, 0.5) 60%,
+        rgba(135, 206, 250, 0.7) 80%,
+        rgba(135, 206, 250, 0.5) 100%
+    );
+    opacity: 0.8;
+    z-index: 1;
+    animation: waterWave 8s infinite linear;
+}
+
+/* Water highlights and ripples */
+.animal-chess-cell.water::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 25%),
+        radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 25%),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 20%),
+        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 20%);
+    z-index: 2;
+    mix-blend-mode: overlay;
+    opacity: 0.7;
+    animation: waterHighlight 10s infinite linear;
+}
+
+/* Additional water reflections */
+.animal-chess-cell.water::before {
+    content: "";
+    background-image:
+        linear-gradient(45deg, transparent 65%, rgba(255, 255, 255, 0.2) 70%, transparent 75%),
+        linear-gradient(135deg, transparent 65%, rgba(255, 255, 255, 0.2) 70%, transparent 75%),
+        linear-gradient(225deg, transparent 65%, rgba(255, 255, 255, 0.2) 70%, transparent 75%),
+        linear-gradient(315deg, transparent 65%, rgba(255, 255, 255, 0.2) 70%, transparent 75%);
+    background-size: 30px 30px;
+    animation: waterRipple 6s infinite linear;
+    z-index: 1;
+}
+
+@keyframes waterWave {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes waterHighlight {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+@keyframes waterRipple {
+    0% { background-position: 0px 0px; }
+    100% { background-position: 30px 30px; }
+}
+
+.animal-chess-cell.den {
+    background-color: #543b22;
+    background-image: 
+        radial-gradient(ellipse at center, #7d644a 0%, #543b22 70%);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.animal-chess-cell.den::before {
+    content: "";
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10C30 10 10 30 10 50C10 70 30 90 50 90C70 90 90 70 90 50C90 30 70 10 50 10ZM50 80C35 80 20 65 20 50C20 35 35 20 50 20C65 20 80 35 80 50C80 65 65 80 50 80Z' fill='%23362612'/%3E%3Cpath d='M50 30C40 30 30 40 30 50C30 60 40 70 50 70C60 70 70 60 70 50C70 40 60 30 50 30ZM50 60C45 60 40 55 40 50C40 45 45 40 50 40C55 40 60 45 60 50C60 55 55 60 50 60Z' fill='%23221808'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.9;
+    transition: transform 0.5s ease;
+}
+
+/* Hiệu ứng hover cho hang */
+.animal-chess-cell.den:hover::before {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Thêm nhãn "HANG" cho ô hang */
+.animal-chess-cell.den::after {
+    content: "HANG";
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ffcc00;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    z-index: 2;
+}
+
+.animal-chess-cell.trap {
+    background-color: #e6bc82;
+    background-image: linear-gradient(45deg, #e6bc82 25%, #dfb579 25%, #dfb579 50%, #e6bc82 50%, #e6bc82 75%, #dfb579 75%, #dfb579 100%);
+    background-size: 20px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.animal-chess-cell.trap::before {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 45C19.5 45 11 36.5 11 26C11 15.5 19.5 7 30 7C40.5 7 49 15.5 49 26C49 36.5 40.5 45 30 45Z' fill='%23653A10'/%3E%3Cpath d='M43 14L38 10L33 13L30 11L27 13L22 10L17 14L20 19L17 24L20 29L17 34L22 38L27 35L30 37L33 35L38 38L43 34L40 29L43 24L40 19L43 14Z' fill='%23874A17'/%3E%3Cpath d='M42 15L38 12L33 15L30 13L27 15L22 12L18 15L21 20L18 25L21 30L18 35L22 38L27 35L30 37L33 35L38 38L42 35L39 30L42 25L39 20L42 15Z' fill='%23653A10'/%3E%3Cpath d='M10 26L12 28L14 26L12 24L10 26ZM18 18L20 20L22 18L20 16L18 18ZM26 10L28 12L30 10L28 8L26 10ZM38 10L40 12L42 10L40 8L38 10ZM46 18L48 20L50 18L48 16L46 18ZM50 26L52 28L54 26L52 24L50 26ZM50 34L52 36L54 34L52 32L50 34ZM46 42L48 44L50 42L48 40L46 42ZM38 50L40 52L42 50L40 48L38 50ZM30 50L32 52L34 50L32 48L30 50ZM22 50L24 52L26 50L24 48L22 50ZM14 42L16 44L18 42L16 40L14 42ZM10 34L12 36L14 34L12 32L10 34Z' fill='%23874A17'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.9;
+    animation: trapPulse 2s ease-in-out infinite alternate;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease;
+}
+
+/* Hiệu ứng hover cho bẫy */
+.animal-chess-cell.trap:hover::before {
+    transform: scale(1.2) rotate(15deg);
+    animation-play-state: paused;
+}
+
+/* Thêm nhãn "BẪY" cho ô bẫy */
+.animal-chess-cell.trap::after {
+    content: "BẪY";
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ff3300;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+    z-index: 2;
+}
+
+/* Làm nổi bật bẫy của từng bên */
+.animal-chess-cell.trap[data-owner="blue"]::before {
+    filter: drop-shadow(0px 0px 5px rgba(0, 0, 255, 0.7));
+    border: 2px solid rgba(0, 0, 255, 0.3);
+    border-radius: 50%;
+}
+
+.animal-chess-cell.trap[data-owner="red"]::before {
+    filter: drop-shadow(0px 0px 5px rgba(255, 0, 0, 0.7));
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    border-radius: 50%;
+}
+
+/* Làm nổi bật hang của từng bên */
+#blue-den {
+    border: 3px solid rgba(0, 0, 255, 0.5);
+    box-shadow: inset 0 0 20px rgba(0, 0, 255, 0.3);
+}
+
+#blue-den::before {
+    border: 2px solid rgba(0, 0, 255, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 8px rgba(0, 0, 255, 0.5));
+}
+
+#red-den {
+    border: 3px solid rgba(255, 0, 0, 0.5);
+    box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+#red-den::before {
+    border: 2px solid rgba(255, 0, 0, 0.5);
+    border-radius: 50%;
+    filter: drop-shadow(0px 0px 8px rgba(255, 0, 0, 0.5));
+}
+
+/* Thêm hiệu ứng cho hang */
+#blue-den::after {
+    content: "HANG XANH";
+    color: #3399ff;
+}
+
+#red-den::after {
+    content: "HANG ĐỎ";
+    color: #ff6666;
+}
+
+/* Thêm hiệu ứng cho bẫy */
+.animal-chess-cell.trap[data-owner="blue"]::after {
+    color: #3399ff;
+    content: "BẪY XANH";
+}
+
+.animal-chess-cell.trap[data-owner="red"]::after {
+    color: #ff6666;
+    content: "BẪY ĐỎ";
+}
+
+@keyframes trapPulse {
+    0% { transform: scale(0.95) rotate(0deg); opacity: 0.85; }
+    100% { transform: scale(1.05) rotate(5deg); opacity: 0.95; }
+}
+
+.animal-chess-cell.possible-move {
+    background-color: rgba(198, 232, 105, 0.8);
+    background-image: 
+        radial-gradient(circle at center, rgba(152, 251, 152, 0.9) 0%, rgba(152, 251, 152, 0) 70%);
+    box-shadow: inset 0 0 15px rgba(92, 184, 92, 0.7),
+                0 0 8px rgba(92, 184, 92, 0.7);
+    cursor: pointer;
+    animation: possibleMoveGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes possibleMoveGlow {
+    from { box-shadow: inset 0 0 15px rgba(92, 184, 92, 0.7), 0 0 8px rgba(92, 184, 92, 0.7); }
+    to { box-shadow: inset 0 0 20px rgba(92, 184, 92, 0.9), 0 0 15px rgba(92, 184, 92, 0.9); }
+}
+
+.animal-chess-cell.possible-move.water {
+    background-color: rgba(78, 184, 255, 0.8);
+    box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.7),
+                0 0 12px rgba(0, 255, 255, 0.7);
+    animation: possibleMoveWaterGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes possibleMoveWaterGlow {
+    from { box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.7), 0 0 8px rgba(0, 255, 255, 0.7); }
+    to { box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.9), 0 0 15px rgba(0, 255, 255, 0.9); }
+}
+
+.animal-chess-cell.possible-move.water::before,
+.animal-chess-cell.possible-move.water::after {
+    opacity: 0.6;
+}
+
+.den-label {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    text-shadow: 0 0 3px #000, 0 0 5px #000;
+    z-index: 5;
+}
+
+.owner-label {
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    bottom: 15%;
+    width: 100%;
+    text-shadow: 0 0 3px #000, 0 0 5px #000;
+    z-index: 5;
+}
+
+.trap-label {
+    color: #653A10;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+    z-index: 5;
+}
+
+/* Quân cờ */
+.animal-chess-piece {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+    overflow: hidden;
+    padding-bottom: 5px;
+    padding-right: 5px;
+}
+
+.animal-chess-piece.flipped {
+    transform: rotate(180deg);
+}
+
+.animal-chess-piece.red {
+    background: radial-gradient(circle at 30% 30%, #ff6b6b, #d43939);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 
+                inset 0 -3px 6px rgba(0, 0, 0, 0.2),
+                inset 0 3px 6px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 107, 107, 0.8);
+}
+
+.animal-chess-piece.red::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    pointer-events: none;
+}
+
+.animal-chess-piece.blue {
+    background: radial-gradient(circle at 30% 30%, #6b9fff, #3973d4);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.2),
+                inset 0 3px 6px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(107, 159, 255, 0.8);
+}
+
+.animal-chess-piece.blue::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    pointer-events: none;
+}
+
+/* Rank indicator for animal pieces */
+.animal-chess-piece::before {
+    content: attr(data-power);
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 50%;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+.animal-chess-piece.selected {
+    box-shadow: 0 0 0 3px #ffeb3b, 
+                0 0 20px rgba(255, 235, 59, 0.7),
+                0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: scale(1.12);
+    z-index: 20;
+}
+
+.animal-chess-piece.flipped.selected {
+    transform: rotate(180deg) scale(1.12);
+}
+
+.animal-chess-piece .animal-icon {
+    font-size: 36px;
+    pointer-events: none;
+    margin-bottom: -2px;
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.7));
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.animal-chess-piece .animal-text {
+    display: none; /* Hide the animal text indicator */
+}
+
+.piece-label {
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    bottom: 2px;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.animal-chess-controls {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.animal-chess-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.reset-button {
+    background: linear-gradient(to bottom, #6fd66f, #5cb85c);
+    color: white;
+    border-bottom: 3px solid #4cae4c;
+}
+
+.reset-button:hover {
+    background: linear-gradient(to bottom, #5cb85c, #4cae4c);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #4cae4c;
+}
+
+.flip-button {
+    background: linear-gradient(to bottom, #f5be5e, #f0ad4e);
+    color: white;
+    border-bottom: 3px solid #eea236;
+}
+
+.flip-button:hover {
+    background: linear-gradient(to bottom, #f0ad4e, #eea236);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #eea236;
+}
+
+.back-button {
+    background: linear-gradient(to bottom, #e27c79, #d9534f);
+    color: white;
+    border-bottom: 3px solid #c9302c;
+}
+
+.back-button:hover {
+    background: linear-gradient(to bottom, #d9534f, #c9302c);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #c9302c;
+}
+
+.rules-button {
+    background: linear-gradient(to bottom, #5bc0de, #31b0d5);
+    color: white;
+    border-bottom: 3px solid #269abc;
+}
+
+.rules-button:hover {
+    background: linear-gradient(to bottom, #31b0d5, #269abc);
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #269abc;
+}
+
+.rules-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.rules-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.rules-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    transform: translateY(-30px);
+    transition: transform 0.3s ease;
+}
+
+.rules-modal.show .rules-content {
+    transform: translateY(0);
+}
+
+.rules-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.rules-close:hover {
+    color: #000;
+}
+
+.rules-title {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.rules-section {
+    margin-bottom: 20px;
+}
+
+.rules-section h3 {
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.rules-section p, .rules-section li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    color: #555;
+}
+
+.rules-section ul {
+    padding-left: 20px;
+}
+
+.win-conditions {
+    background-color: #f8f9fa;
+    border-left: 4px solid #28a745;
+    padding: 12px 15px;
+    margin-top: 15px;
+    border-radius: 0 4px 4px 0;
+}
+
+.trap-rules {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    padding: 12px 15px;
+    margin-top: 15px;
+    border-radius: 0 4px 4px 0;
+}
+
+.trap-rules h3 {
+    color: #e65100;
+}
+
+.trap-rules strong {
+    color: #e65100;
+}
+
+/* Media queries cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .animal-chess-board {
+        grid-template-columns: repeat(7, 50px);
+        grid-template-rows: repeat(9, 50px);
+    }
+    
+    .animal-chess-cell {
+        width: 50px;
+        height: 50px;
+        background-size: 16px 16px;
+    }
+    
+    .animal-chess-cell.trap::before {
+        width: 85%;
+        height: 85%;
+        top: 7.5%;
+        left: 7.5%;
+    }
+    
+    .animal-chess-piece {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .animal-chess-piece .animal-icon {
+        font-size: 28px;
+    }
+    
+    .animal-chess-piece .animal-text {
+        display: none;
+    }
+    
+    .animal-chess-piece::before {
+        font-size: 10px;
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+    }
+    
+    .piece-label {
+        font-size: 8px;
+        bottom: 0;
+    }
+    
+    .den-label, .trap-label {
+        font-size: 10px;
+    }
+    
+    .owner-label {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .animal-chess-board {
+        grid-template-columns: repeat(7, 40px);
+        grid-template-rows: repeat(9, 40px);
+    }
+    
+    .animal-chess-cell {
+        width: 40px;
+        height: 40px;
+        background-size: 12px 12px;
+    }
+    
+    .animal-chess-cell.trap::before {
+        width: 80%;
+        height: 80%;
+        top: 10%;
+        left: 10%;
+    }
+    
+    .animal-chess-piece {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .animal-chess-piece .animal-icon {
+        font-size: 22px;
+        margin-bottom: 0;
+    }
+    
+    .animal-chess-piece .animal-text {
+        display: none;
+    }
+    
+    .animal-chess-piece::before {
+        font-size: 8px;
+        width: 12px;
+        height: 12px;
+        line-height: 12px;
+        right: 1px;
+        bottom: 1px;
+    }
+    
+    .den-label, .trap-label {
+        font-size: 8px;
+    }
+    
+    .owner-label {
+        font-size: 7px;
+    }
+    
+    .animal-chess-button {
+        padding: 10px 18px;
+        font-size: 12px;
+    }
+    
+    .animal-chess-status {
+        font-size: 1.2rem;
+        padding: 10px 18px;
+    }
+}
+
+.animal-chess-piece.trapped {
+    opacity: 0.85;
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.7), 
+                0 0 8px rgba(255, 0, 0, 0.6);
+    animation: trappedPulse 1.5s ease-in-out infinite alternate;
+}
+
+.animal-chess-piece.trapped::before {
+    content: "0" !important;  /* Force the rank to show as 0 when trapped */
+}
+
+@keyframes trappedPulse {
+    0% { box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.7), 0 0 8px rgba(255, 0, 0, 0.6); }
+    100% { box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.9), 0 0 12px rgba(255, 0, 0, 0.8); }
+}
+
+/* Hiển thị sức mạnh trong ô tròn đen */
+.power-display {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: #000;
+    color: #fff;
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Hiệu ứng cho quân trong bẫy */
+.animal-chess-piece.trapped .power-display {
+    background-color: #000 !important;
+    color: #ff0000 !important;
+}
+
+/* CSS cho chế độ chơi trực tuyến Cờ Thú */
+.animal-chess-online-ui {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.animal-chess-online-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.login-section input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 250px;
+}
+
+.animal-chess-online-content {
+    background-color: #f8f8f8;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.animal-chess-room-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.animal-chess-join-room {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.animal-chess-join-room input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.animal-chess-room-list-section {
+    margin-top: 30px;
+}
+
+.animal-chess-room-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.animal-chess-room-list-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.animal-chess-loading-rooms {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.animal-chess-no-rooms-message {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.animal-chess-room-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.animal-chess-room-item:last-child {
+    border-bottom: none;
+}
+
+.animal-chess-room-item:hover {
+    background-color: #f8f8f8;
+}
+
+.animal-chess-room-id {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.animal-chess-join-room-btn {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.animal-chess-join-room-btn:hover {
+    background-color: #45a049;
+}
+
+.animal-chess-join-room-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.animal-chess-room-info {
+    background-color: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.animal-chess-room-details {
+    margin-top: 20px;
+}
+
+.animal-chess-players-status {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+.animal-chess-player-status {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.animal-chess-player-label {
+    font-weight: bold;
+}
+
+.animal-chess-blue-player {
+    color: #3973d4;
+}
+
+.animal-chess-red-player {
+    color: #d43939;
+}
+
+.animal-chess-room-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.animal-chess-match-info {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.animal-chess-players {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.animal-chess-player {
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.animal-chess-current-player {
+    font-weight: bold;
+    background-color: rgba(255, 255, 224, 0.8);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.animal-chess-blue-label {
+    color: #3973d4;
+    font-weight: bold;
+}
+
+.animal-chess-red-label {
+    color: #d43939;
+    font-weight: bold;
+}
+
+.animal-chess-room-code {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.animal-chess-match-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.animal-chess-result-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.animal-chess-result-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.animal-chess-result-message {
+    margin: 20px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.animal-chess-win {
+    color: #4CAF50;
+}
+
+.animal-chess-draw {
+    color: #ff9800;
+}
+
+.animal-chess-lose {
+    color: #f44336;
+}
+
+.animal-chess-result-details {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+}
+
+.animal-chess-player-result {
+    margin: 10px 0;
+}
+
+.animal-chess-result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.animal-chess-back {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Media queries for mobile devices */
+@media (max-width: 768px) {
+    .animal-chess-online-ui {
+        padding: 10px;
+    }
+    
+    .login-section {
+        flex-direction: column;
+    }
+    
+    .animal-chess-join-room {
+        flex-direction: column;
+    }
+    
+    .animal-chess-room-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .animal-chess-match-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+} 

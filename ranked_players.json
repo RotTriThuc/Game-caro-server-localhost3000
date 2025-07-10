@@ -1,0 +1,35 @@
+{
+  "mlZ3nXzY1PpkVJb3AAAT": {
+    "id": "mlZ3nXzY1PpkVJb3AAAT",
+    "username": "hv",
+    "passwordHash": "9956f664011d642b57fc19ff17a8f52e05c2a01e5cf7bd53cbfa9698b7b79900f7aa15cddb29d1d9ae3e1c57c5009bddf2102af43752f27850f44619d6627d7d",
+    "passwordSalt": "7ae6dfda9a21fbbef7b08e458ad2cebc",
+    "elo": 1000,
+    "wins": 0,
+    "losses": 0,
+    "draws": 0,
+    "createdAt": 1750994483809
+  },
+  "eX5QgipwduKyaItuAAAX": {
+    "id": "eX5QgipwduKyaItuAAAX",
+    "username": "hoaivu2",
+    "passwordHash": "1dd562fc9fe1b85234e466c3a2690fe3d206eddfacc215e62870f0cf8a820551f980e079b7d5a16a79ff3986837d48f96d05e82ba695d0192c27e4288986e0be",
+    "passwordSalt": "eb9c0483b4a156595c24737af0825b76",
+    "elo": 862,
+    "wins": 1,
+    "losses": 11,
+    "draws": 0,
+    "createdAt": 1750923246816
+  },
+  "Pmt5R8pYMNgAz5N8AAAP": {
+    "id": "Pmt5R8pYMNgAz5N8AAAP",
+    "username": "hoaivu",
+    "passwordHash": "447e0a9cba6bf8ecfb19c922495f535358fc9b84b3efb1f2b9f8c829701fd03138acef06622104e6e61968cc37d4fb62255c163c9b7a89c53eaadbf90356fb7c",
+    "passwordSalt": "d821f28c695c16b5ffd471f9977baed6",
+    "elo": 1010,
+    "wins": 19,
+    "losses": 9,
+    "draws": 0,
+    "createdAt": 1750922978105
+  }
+}
