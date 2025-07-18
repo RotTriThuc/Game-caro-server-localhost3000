@@ -1,0 +1,54 @@
+{
+  "name": "caro-game",
+  "version": "1.0.0",
+  "description": "Game Caro (Gomoku) with AI and online play",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --win --x64",
+    "build:no-icon": "node build-without-icon.js",
+    "build:simple": "node build-simple.js",
+    "server": "node server.js",
+    "check": "node -e \"console.log('Node.js works!'); console.log('Node version:', process.version); console.log('Electron packages:', require('electron/package.json').version)\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase": "^8.3.1",
+    "socket.io": "^4.0.0",
+    "socket.io-client": "^4.0.0"
+  },
+  "devDependencies": {
+    "electron": "^19.0.0",
+    "electron-builder": "^23.0.0"
+  },
+  "build": {
+    "appId": "com.carogame.app",
+    "productName": "Caro Game",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/**/*"
+    ],
+    "extraFiles": [
+      {
+        "from": "node_modules",
+        "to": "node_modules",
+        "filter": ["firebase/**/*", "socket.io-client/**/*"]
+      }
+    ]
+  }
+} 

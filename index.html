@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="desktop-ui-style.css">
+    <link rel="stylesheet" href="animal-chess.css">
+    <!-- Socket.IO client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Add electron-specific scripts only for desktop app -->
+    <script>
+        if (window.navigator.userAgent.toLowerCase().indexOf('electron') > -1) {
+            const electronScript = document.createElement('script');
+            electronScript.src = 'preload.js';
+            document.head.appendChild(electronScript);
+            
+            const uiHelperScript = document.createElement('script');
+            uiHelperScript.src = 'electron-ui-helper.js';
+            document.head.appendChild(uiHelperScript);
+        }
+    </script>
+    <script src="game-selection.js"></script>
+    <script src="animal-chess-ai.js"></script>
+    <script src="animal-chess.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Hub</h1>
+        
+        <!-- Game type selection section -->
+        <div id="game-type-selection" class="game-type-selection">
+            <h2>Chọn loại game</h2>
+            <div class="game-types-container">
+                <div class="game-type-card" id="caro-game-btn">
+                    <div class="type-icon">❌⭕</div>
+                    <h3>Cờ Caro</h3>
+                    <p>Trò chơi xếp 5 quân X hoặc O liên tiếp trên bàn cờ</p>
+                </div>
+                
+                <div class="game-type-card" id="animal-chess-btn">
+                    <div class="type-icon">🐘🐅</div>
+                    <h3>Cờ Thú</h3>
+                    <p>Trò chơi cờ với các quân cờ là các con vật</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game selection section (for Caro) -->
+        <div id="game-selection" class="game-selection" style="display: none;">
+            <h2>Chọn chế độ chơi</h2>
+            <div class="game-modes-container">
+                <div class="game-mode-card" id="local-game-btn">
+                    <div class="mode-icon">👥</div>
+                    <h3>Chơi tại chỗ</h3>
+                    <p>Chơi với người khác trên cùng thiết bị</p>
+                </div>
+                
+                <div class="game-mode-card" id="ai-game-btn">
+                    <div class="mode-icon">🤖</div>
+                    <h3>Chơi với máy</h3>
+                    <p>Đấu với AI ở nhiều cấp độ khó khác nhau</p>
+                </div>
+                
+                <div class="game-mode-card" id="online-game-btn">
+                    <div class="mode-icon">🌐</div>
+                    <h3>Chơi trực tuyến</h3>
+                    <p>Chơi với người khác qua internet</p>
+                </div>
+                
+                <div class="game-mode-card" id="ranked-game-btn">
+                    <div class="mode-icon">🏆</div>
+                    <h3>Chơi xếp hạng</h3>
+                    <p>Tham gia các trận đấu xếp hạng và leo bảng xếp hạng</p>
+                </div>
+            </div>
+            
+            <!-- Luật chơi -->
+            <div class="game-rules">
+                <div class="rules-header" id="rules-toggle">
+                    <h3>Luật chơi</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="rules-content" id="rules-content">
+                    <p><strong>Luật cơ bản:</strong> Người chơi thay phiên đặt quân cờ của mình (X hoặc O) vào các ô trống trên bàn cờ.</p>
+                    <p><strong>Điều kiện thắng:</strong> Người chơi có 5 quân liên tiếp theo chiều ngang, dọc hoặc chéo sẽ thắng.</p>
+                    <p><strong>Luật "chặn 2 đầu":</strong> Một chuỗi 5 quân liên tiếp chỉ được tính là thắng nếu không bị chặn cả hai đầu bởi quân của đối phương hoặc biên bàn cờ. Nếu cả hai đầu đều bị chặn, chuỗi đó không được tính là thắng.</p>
+                    <div class="rule-example">
+                        <p><strong>Ví dụ:</strong></p>
+                        <p>✓ XXXXX (Thắng: không bị chặn)</p>
+                        <p>✓ OXXXXXX (Thắng: chỉ bị chặn 1 đầu)</p>
+                        <p>✓ XXXXXO (Thắng: chỉ bị chặn 1 đầu)</p>
+                        <p>✗ OXXXXO (Không thắng: bị chặn cả 2 đầu)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back button -->
+            <div class="back-to-selection">
+                <button id="back-to-game-types-btn" class="back-btn">Quay lại</button>
+            </div>
+        </div>
+        
+        <!-- Animal Chess Game Selection -->
+        <div id="animal-chess-selection" class="game-selection" style="display: none;">
+            <h2>Cờ Thú - Chọn chế độ chơi</h2>
+            <div class="game-modes-container">
+                <div class="game-mode-card" id="animal-local-game-btn">
+                    <div class="mode-icon">👥</div>
+                    <h3>Chơi tại chỗ</h3>
+                    <p>Chơi với người khác trên cùng thiết bị</p>
+                </div>
+                
+                <div class="game-mode-card" id="animal-ai-game-btn">
+                    <div class="mode-icon">🤖</div>
+                    <h3>Chơi với máy</h3>
+                    <p>Đấu với AI ở nhiều cấp độ khó khác nhau</p>
+                </div>
+                
+                <div class="game-mode-card" id="animal-online-game-btn">
+                    <div class="mode-icon">🌐</div>
+                    <h3>Chơi trực tuyến</h3>
+                    <p>Chơi với người khác qua internet</p>
+                </div>
+            </div>
+            
+            <!-- Luật chơi cờ thú -->
+            <div class="game-rules">
+                <div class="rules-header" id="animal-rules-toggle">
+                    <h3>Luật chơi</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="rules-content" id="animal-rules-content">
+                    <p><strong>Luật cơ bản:</strong> Cờ thú là trò chơi chiến thuật giữa hai người chơi trên bàn cờ 7x9.</p>
+                    <p><strong>Mục tiêu:</strong> Đưa một trong các con thú của bạn vào hang (đền) của đối phương hoặc bắt hết các con thú của đối phương.</p>
+                    <p><strong>Thứ bậc quân cờ:</strong> Voi > Sư tử > Cọp > Báo > Chó > Sói > Mèo > Chuột. Chuột có thể bắt Voi.</p>
+                    <p><strong>Nước đi đặc biệt:</strong></p>
+                    <ul>
+                        <li>Chuột có thể đi vào nước, các con khác không thể</li>
+                        <li>Sư tử và Cọp có thể nhảy qua nước nếu không có Chuột ở giữa</li>
+                        <li>Quân trong bẫy của đối phương sẽ không có sức mạnh</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Back button -->
+            <div class="back-to-selection">
+                <button id="animal-back-to-game-types-btn" class="back-btn">Quay lại</button>
+            </div>
+        </div>
+        
+        <!-- Animal Chess Game Board Container -->
+        <div id="animal-chess-game-container" class="animal-chess-container" style="display: none;">
+        </div>
+        
+        <!-- Local/AI Game settings -->
+        <div id="local-settings" class="settings" style="display: none;">
+            <div class="board-size">
+                <label for="board-size-select">Kích thước bàn cờ:</label>
+                <select id="board-size-select">
+                    <option value="10">10x10</option>
+                    <option value="15" selected>15x15</option>
+                    <option value="20">20x20</option>
+                    <option value="custom">Tùy chỉnh</option>
+                </select>
+            </div>
+            
+            <!-- Tùy chỉnh kích thước bàn cờ -->
+            <div class="custom-board-size" id="custom-board-size-container" style="display: none;">
+                <div class="custom-size-input">
+                    <label for="custom-size">Số ô (5-30):</label>
+                    <input type="number" id="custom-size" min="5" max="30" value="15">
+                </div>
+                <div class="size-note">Lưu ý: Kích thước quá lớn có thể ảnh hưởng đến hiệu suất.</div>
+            </div>
+            
+            <div class="game-mode">
+                <label for="game-mode-select">Chế độ chơi:</label>
+                <select id="game-mode-select">
+                    <option value="human">Chơi với người</option>
+                    <option value="ai">Chơi với máy</option>
+                </select>
+            </div>
+            <div class="ai-difficulty" id="ai-difficulty-container" style="display: none;">
+                <label for="ai-difficulty-select">Độ khó:</label>
+                <select id="ai-difficulty-select">
+                    <option value="easy">Dễ</option>
+                    <option value="medium" selected>Trung bình</option>
+                    <option value="hard">Khó</option>
+                    <option value="veryhard">Rất khó</option>
+                </select>
+            </div>
+            <button id="start-local-game-btn" class="start-btn">Bắt đầu</button>
+        </div>
+        
+        <!-- Ranked Game settings -->
+        <div id="ranked-settings" class="settings" style="display: none;">
+            <div id="ranked-login" class="online-section">
+                <input type="text" id="ranked-player-name" placeholder="Nhập tên của bạn" maxlength="15">
+                <input type="password" id="ranked-player-password" placeholder="Mật khẩu" maxlength="20">
+                <div class="ranked-buttons">
+                    <button id="ranked-login-btn" class="online-btn">Đăng nhập</button>
+                    <button id="ranked-register-btn" class="online-btn">Đăng ký</button>
+                </div>
+                <div class="back-to-selection">
+                    <button id="ranked-back-btn" class="online-btn back-btn">Quay lại</button>
+                </div>
+            </div>
+            
+            <div id="ranked-lobby" class="online-section" style="display: none;">
+                <div class="player-info">
+                    <div class="ranked-player-info">
+                        <span>Xin chào, </span><span id="ranked-current-player"></span>
+                        <div class="ranked-stats">
+                            <div class="rank-badge" id="rank-badge">
+                                <span id="player-rank">Bạc</span>
+                            </div>
+                            <div class="elo-info">
+                                <span>Điểm Elo: </span><span id="player-elo">1000</span>
+                            </div>
+                        </div>
+                        <button id="ranked-logout-btn" class="logout-btn">Đăng xuất</button>
+                    </div>
+                </div>
+                
+                <!-- Bảng xếp hạng -->
+                <div class="leaderboard-section">
+                    <div class="leaderboard-header">
+                        <h3>Bảng xếp hạng</h3>
+                        <button id="refresh-leaderboard-btn" class="refresh-btn">Làm mới</button>
+                    </div>
+                    <div id="leaderboard-container" class="leaderboard-container">
+                        <div class="loading-leaderboard">Đang tải bảng xếp hạng...</div>
+                    </div>
+                </div>
+                
+                <div class="ranked-options">
+                    <button id="find-match-btn" class="online-btn">Tìm trận đấu</button>
+                    <div id="finding-match" class="finding-match" style="display: none;">
+                        <div class="finding-text">Đang tìm đối thủ...</div>
+                        <div class="spinner"></div>
+                        <button id="cancel-match-btn" class="cancel-btn">Hủy</button>
+                    </div>
+                </div>
+                
+                <div class="ranked-buttons-row">
+                    <button id="ranked-info-btn" class="online-btn">Thông tin hạng</button>
+                    <button id="ranked-rooms-btn" class="online-btn">Danh sách phòng</button>
+                    <button id="ranked-back-to-menu-btn" class="online-btn back-btn">Quay lại</button>
+                </div>
+            </div>
+            
+            <!-- Danh sách phòng xếp hạng -->
+            <div id="ranked-room-section" class="online-section" style="display: none;">
+                <div class="player-info">
+                    <div class="ranked-player-info">
+                        <span>Xin chào, </span><span id="ranked-current-player-room"></span>
+                        <div class="ranked-stats">
+                            <div class="rank-badge" id="rank-badge-room">
+                                <span id="player-rank-room">Bạc</span>
+                            </div>
+                            <div class="elo-info">
+                                <span>Điểm Elo: </span><span id="player-elo-room">1000</span>
+                            </div>
+                        </div>
+                        <button id="ranked-logout-btn-room" class="logout-btn">Đăng xuất</button>
+                    </div>
+                </div>
+                
+                <!-- Danh sách phòng -->
+                <div class="room-list-section">
+                    <div class="room-list-header">
+                        <h3>Danh sách phòng</h3>
+                        <button id="refresh-ranked-rooms-btn" class="refresh-btn">Làm mới</button>
+                    </div>
+                    <div id="ranked-room-list-container" class="room-list-container">
+                        <div class="loading-rooms">Đang tải danh sách phòng...</div>
+                    </div>
+                </div>
+                
+                <div class="or-divider">hoặc</div>
+                
+                <div class="room-options">
+                    <button id="create-ranked-room-btn" class="online-btn">Tạo phòng mới</button>
+                    <div class="or-divider">hoặc</div>
+                    <div class="join-room">
+                        <input type="text" id="ranked-room-id-input" placeholder="Nhập mã phòng">
+                        <button id="join-ranked-room-btn" class="online-btn">Vào phòng</button>
+                    </div>
+                </div>
+                
+                <div class="back-to-lobby">
+                    <button id="back-to-ranked-lobby-btn" class="online-btn">Quay lại</button>
+                </div>
+            </div>
+            
+            <div id="ranked-match-info" class="online-section" style="display: none;">
+                <div class="match-info">
+                    <h3>Thông tin trận đấu</h3>
+                    <div class="players-status">
+                        <div id="ranked-player1-status" class="player-status">
+                            <span class="player-label">X: </span>
+                            <span id="ranked-player1-name">Đang chờ...</span>
+                            <span class="player-elo" id="ranked-player1-elo">(1000)</span>
+                        </div>
+                        <div id="ranked-player2-status" class="player-status">
+                            <span class="player-label">O: </span>
+                            <span id="ranked-player2-name">Đang chờ...</span>
+                            <span class="player-elo" id="ranked-player2-elo">(1000)</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="leave-ranked-match-btn" class="online-btn">Rời trận đấu</button>
+            </div>
+            
+            <!-- Kết quả trận đấu -->
+            <div id="match-result" class="match-result" style="display: none;">
+                <div class="result-header">
+                    <h3>Kết quả trận đấu</h3>
+                </div>
+                <div class="result-content">
+                    <div class="result-status" id="result-status">Thắng!</div>
+                    <div class="elo-change">
+                        <span>Điểm Elo: </span>
+                        <span id="old-elo">1000</span>
+                        <span> → </span>
+                        <span id="new-elo">1020</span>
+                        <span id="elo-diff" class="elo-diff">(+20)</span>
+                    </div>
+                </div>
+                <button id="close-result-btn" class="online-btn">Đóng</button>
+            </div>
+        </div>
+        
+        <!-- Game board section -->
+        <div id="game-board-container" class="game-container" style="display: none;">
+            <div class="status" id="status">Lượt của X</div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-out">-</button>
+                <input type="range" min="50" max="300" value="100" class="zoom-slider" id="zoom-slider">
+                <button class="zoom-btn" id="zoom-in">+</button>
+                <span class="zoom-value" id="zoom-value">100%</span>
+                <button class="zoom-btn reset-position-btn" id="reset-position" title="Đặt lại vị trí bàn cờ">⟲</button>
+            </div>
+            <div class="board-container" id="board-container">
+                <div class="board-wrapper" id="board-wrapper">
+                    <div class="board" id="board">
+                        <!-- Game board will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button id="reset-btn">Chơi lại</button>
+                <button id="back-btn">Quay lại</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Server info section -->
+    <div class="server-info">
+        <button class="server-info-toggle" id="server-info-toggle" title="Thu gọn/Mở rộng">−</button>
+        <p>Server: <span id="server-url">localhost:3000</span></p>
+        <p>IP LAN: <span id="lan-ip">Đang tải...</span></p>
+        <p>Người chơi: <span id="online-players">0</span></p>
+        <p>Phòng: <span id="active-rooms">0</span></p>
+    </div>
+    
+    <!-- Game scripts -->
+    <script src="socket-client.js"></script>
+    <script src="ranked-game.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- Script cập nhật thông tin server -->
+    <script>
+        // Hàm cập nhật trực tiếp thông tin server
+        function updateServerInfo() {
+            // Cập nhật IP LAN
+            const lanIpElement = document.getElementById('lan-ip');
+            if (lanIpElement) {
+                // Thử lấy từ localStorage
+                const savedIp = localStorage.getItem('lan-ip');
+                if (savedIp) {
+                    lanIpElement.textContent = savedIp;
+                } else {
+                    lanIpElement.textContent = 'Đang cập nhật...';
+                    // Nếu không có trong localStorage, thiết lập giá trị mặc định
+                    fetch('/get-lan-ip')
+                        .then(response => response.text())
+                        .then(ip => {
+                            lanIpElement.textContent = ip;
+                            localStorage.setItem('lan-ip', ip);
+                        })
+                        .catch(() => {
+                            lanIpElement.textContent = window.location.hostname;
+                        });
+                }
+            }
+            
+            // Cập nhật thông tin người chơi và phòng
+            const playersElement = document.getElementById('online-players');
+            const roomsElement = document.getElementById('active-rooms');
+            
+            // Lấy thông tin thực tế từ server
+            fetch('/get-server-stats')
+                .then(response => response.json())
+                .then(stats => {
+                    if (playersElement) playersElement.textContent = stats.players;
+                    if (roomsElement) roomsElement.textContent = stats.rooms;
+                })
+                .catch(err => {
+                    console.error('Lỗi khi lấy thông tin server:', err);
+                });
+            
+            // Cập nhật lại sau 5 giây
+            setTimeout(updateServerInfo, 5000);
+        }
+        
+        // Gọi hàm cập nhật ngay khi tải trang
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateServerInfo, 500);
+        });
+    </script>
+</body>
+</html> 
