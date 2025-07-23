@@ -1,0 +1,90 @@
+/* Styles dành riêng cho phiên bản desktop app */
+
+/* Định dạng cho body khi chạy trong Electron */
+body.electron-app {
+    /* Thêm padding cho thanh tiêu đề nếu cần */
+    /* padding-top: 30px; */
+}
+
+/* Thanh tiêu đề desktop (hiện đang ẩn theo mặc định) */
+.desktop-title {
+    background-color: #2c3e50;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    font-weight: bold;
+    user-select: none;
+    -webkit-app-region: drag; /* Cho phép kéo cửa sổ từ thanh tiêu đề */
+}
+
+/* Chỉnh style cho các nút điều khiển */
+.electron-app .control-button {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 4px;
+    margin: 2px;
+    padding: 8px 12px;
+    transition: background-color 0.2s;
+}
+
+.electron-app .control-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Tối ưu giao diện cho desktop */
+.electron-app #game-board-container {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.electron-app #board {
+    transition: transform 0.2s ease;
+}
+
+/* Hiệu ứng hover cho các ô trên bàn cờ - chỉ áp dụng cho desktop */
+.electron-app .cell:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Tối ưu các nút và điều khiển cho desktop */
+.electron-app button {
+    cursor: pointer;
+}
+
+/* Định dạng cho menu trong phiên bản desktop */
+.electron-app #game-selection button {
+    min-width: 180px;
+}
+
+/* Tăng kích thước cho một số phần tử trong desktop */
+.electron-app h1 {
+    font-size: 28px;
+    margin: 15px 0;
+}
+
+/* Thêm thanh trạng thái cho phiên bản desktop */
+.electron-app #status {
+    border-radius: 4px;
+    padding: 10px;
+    margin: 15px 0;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Thêm độ tương phản cho bàn cờ trong desktop */
+.electron-app .cell {
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cải thiện hiển thị của các quân X và O */
+.electron-app .cell.x {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.electron-app .cell.o {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Nút zoom trong desktop */
+.electron-app #zoom-controls button {
+    padding: 8px 12px;
+    margin: 0 5px;
+} 

@@ -1,0 +1,22 @@
+Thư mục này chứa các hình ảnh quân cờ thú.
+
+Các file hình ảnh cần có:
+1. red_E.png - Voi đỏ
+2. red_L.png - Sư tử đỏ
+3. red_T.png - Cọp đỏ
+4. red_P.png - Báo đỏ
+5. red_D.png - Chó đỏ
+6. red_W.png - Sói đỏ
+7. red_C.png - Mèo đỏ
+8. red_R.png - Chuột đỏ
+
+9. blue_E.png - Voi xanh
+10. blue_L.png - Sư tử xanh
+11. blue_T.png - Cọp xanh
+12. blue_P.png - Báo xanh
+13. blue_D.png - Chó xanh
+14. blue_W.png - Sói xanh
+15. blue_C.png - Mèo xanh
+16. blue_R.png - Chuột xanh
+
+Trong bản demo này, chúng ta sẽ sử dụng chữ viết tắt thay cho hình ảnh. 
